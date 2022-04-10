@@ -61,7 +61,7 @@ namespace NugetUtility.Tests
         public async Task GetNugetInformationAsync_Should_Resolve_Missing_NuSpec_File(string package)
         {
             AddMethods();
-            var packages = package.Split(';', System.StringSplitOptions.RemoveEmptyEntries);
+            var packages = package.Split(';', StringSplitOptions.RemoveEmptyEntries);
             var referencedpackages = packages.Select(p => { var split = p.Split(","); return new PackageNameAndVersion { Name = split[0], Version = split[1] }; });
             var information = await _methods.GetNugetInformationAsync(_projectPath, referencedpackages);
 
