@@ -255,7 +255,7 @@ namespace NugetUtility
 
         private async Task<IEnumerable<string>> GetVersionsFromNugetServerAsync(string packageName)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get, $"{packageName}/index.json");
+            using var request = new HttpRequestMessage(HttpMethod.Get, $"{packageName}/index.json".ToLowerInvariant());
             try
             {
                 using var response = await _httpClient.SendAsync(request);
