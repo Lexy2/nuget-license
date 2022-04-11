@@ -262,10 +262,12 @@ namespace NugetUtility
                 if (!response.IsSuccessStatusCode)
                 {
                     WriteOutput($"{request.RequestUri} failed due to {response.StatusCode}!", logLevel: LogLevel.Error);
+                    WriteOutput($"Content sent was:\n {response.RequestMessage}", logLevel: LogLevel.Error);
                     var content = await response.Content.ReadAsStringAsync();
                     WriteOutput($"Headers: {response.Headers}\nReasonPhrase: {response.ReasonPhrase}\nContent: {content}!", logLevel: LogLevel.Error);
                     return Enumerable.Empty<string>();
                 }
+                WriteOutput($"Content sent was:\n {response.RequestMessage}!", logLevel: LogLevel.Error);
 
                 var jsonData = await response.Content.ReadAsStreamAsync();
                 var doc = await JsonDocument.ParseAsync(jsonData);
