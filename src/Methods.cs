@@ -255,6 +255,7 @@ namespace NugetUtility
 
         private async Task<IEnumerable<string>> GetVersionsFromNugetServerAsync(string packageName)
         {
+            // Linux request fails with NotFound if URL has any uppercase letters, thus, converting it all to lowercase
             using var request = new HttpRequestMessage(HttpMethod.Get, $"{packageName}/index.json".ToLowerInvariant());
             try
             {
@@ -262,12 +263,9 @@ namespace NugetUtility
                 if (!response.IsSuccessStatusCode)
                 {
                     WriteOutput($"{request.RequestUri} failed due to {response.StatusCode}!", logLevel: LogLevel.Error);
-                    WriteOutput($"Content sent was:\n {response.RequestMessage}", logLevel: LogLevel.Error);
                     var content = await response.Content.ReadAsStringAsync();
-                    WriteOutput($"Headers: {response.Headers}\nReasonPhrase: {response.ReasonPhrase}\nContent: {content}!", logLevel: LogLevel.Error);
                     return Enumerable.Empty<string>();
                 }
-                WriteOutput($"Content sent was:\n {response.RequestMessage}!", logLevel: LogLevel.Error);
 
                 var jsonData = await response.Content.ReadAsStreamAsync();
                 var doc = await JsonDocument.ParseAsync(jsonData);
